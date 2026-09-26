@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Library Members</title>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body>
+
+<div class="container">
+
+    <div class="header">
+        <h1>👥 Library Members</h1>
+        <p>Manage registered library members</p>
+    </div>
+
+    <br>
+
+    <div class="card">
+        <h2>➕ Add New Member</h2>
+
+        <form method="POST" action="/add-member">
+
+            <label>Member Name:</label>
+            <br>
+            <input type="text" name="name" placeholder="Enter member name" class="search-input" required>
+
+            <br><br>
+
+            <label>Email:</label>
+            <br>
+            <input type="email" name="email" placeholder="Enter email address" class="search-input" required>
+            <br><br>
+
+            <button type="submit">➕ Add Member</button>
+
+        </form>
+    </div>
+
+    <br>
+
+    <div class="card">
+        <h2>👥 Registered Members</h2>
+
+        <table>
+
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Member Name</th>
+                    <th>Email</th>
+                </tr>
+            </thead>
+
+            <tbody>
+
+                {% for member in members %}
+
+                <tr>
+                    <td>{{ member[0] }}</td>
+                    <td>{{ member[1] }}</td>
+                    <td>{{ member[2] }}</td>
+                </tr>
+
+                {% else %}
+
+                <tr>
+                    <td colspan="3">No members found.</td>
+                </tr>
+
+                {% endfor %}
+
+            </tbody>
+
+        </table>
+    </div>
+
+    <br>
+
+    <a href="/">
+        <button>🏠 Dashboard</button>
+    </a>
+
+</div>
+
+</body>
+</html>

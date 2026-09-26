@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Library Reports</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body>
+
+<div class="dashboard">
+
+    <!-- Sidebar -->
+    <aside class="sidebar">
+
+        <div class="logo">
+            📚
+            <span>Smart Library</span>
+        </div>
+
+        <nav class="sidebar-nav">
+            <a href="/">
+                🏠 <span>Dashboard</span>
+            </a>
+
+            <a href="/books">
+                📚 <span>Books</span>
+            </a>
+
+            <a href="/members">
+                👥 <span>Members</span>
+            </a>
+
+            <a href="/issue-return">
+                📖 <span>Issue / Return</span>
+            </a>
+
+            <a href="/reports" class="active">
+                📊 <span>Reports</span>
+            </a>
+        </nav>
+
+        <div class="sidebar-bottom">
+            <p>Smart Library</p>
+            <small>Management System</small>
+        </div>
+
+    </aside>
+
+
+    <!-- Main Content -->
+    <main class="main-content">
+
+        <div class="top-header">
+
+            <div>
+                <h1>Reports</h1>
+                <p>Library statistics and transaction summary</p>
+            </div>
+
+            <div class="header-icon">
+                📊
+            </div>
+
+        </div>
+
+
+        <!-- Statistics -->
+        <div class="stats-grid">
+
+            <div class="stat-card">
+
+                <div class="stat-icon blue">
+                    📚
+                </div>
+
+                <div>
+                    <h3>Total Books</h3>
+                    <h2>{{ total_books }}</h2>
+                </div>
+
+            </div>
+
+
+            <div class="stat-card">
+
+                <div class="stat-icon purple">
+                    👥
+                </div>
+
+                <div>
+                    <h3>Total Members</h3>
+                    <h2>{{ total_members }}</h2>
+                </div>
+
+            </div>
+
+
+            <div class="stat-card">
+
+                <div class="stat-icon orange">
+                    📖
+                </div>
+
+                <div>
+                    <h3>Currently Issued</h3>
+                    <h2>{{ issued_books }}</h2>
+                </div>
+
+            </div>
+
+
+            <div class="stat-card">
+
+                <div class="stat-icon green">
+                    🔄
+                </div>
+
+                <div>
+                    <h3>Returned Books</h3>
+                    <h2>{{ returned_books }}</h2>
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- Summary Cards -->
+        <div class="quick-actions">
+
+            <div class="action-card">
+
+                <div>📋</div>
+
+                <h3>Total Transactions</h3>
+
+                <p>
+                    {{ total_transactions }} transactions recorded
+                </p>
+
+            </div>
+
+
+            <div class="action-card">
+
+                <div>💰</div>
+
+                <h3>Total Fine</h3>
+
+                <p>
+                    ₹{{ "%.2f"|format(total_fine) }}
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <!-- Transaction Report -->
+        <div class="content-card">
+
+            <div class="card-header">
+
+                <div>
+
+                    <h2>📋 Transaction Report</h2>
+
+                    <p>
+                        Latest library issue and return transactions
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <div class="recent-books">
+
+                <table>
+
+                    <thead>
+
+                        <tr>
+                            <th>ID</th>
+                            <th>Book</th>
+                            <th>Member</th>
+                            <th>Issue Date</th>
+                            <th>Return Date</th>
+                            <th>Status</th>
+                            <th>Fine</th>
+                        </tr>
+
+                    </thead>
+
+
+                    <tbody>
+
+                        {% for transaction in transactions %}
+
+                        <tr>
+
+                            <td>
+                                #{{ transaction[0] }}
+                            </td>
+
+                            <td>
+                                {{ transaction[1] }}
+                            </td>
+
+                            <td>
+                                {{ transaction[2] }}
+                            </td>
+
+                            <td>
+                                {{ transaction[3] }}
+                            </td>
+
+                            <td>
+
+                                {% if transaction[4] %}
+                                    {{ transaction[4] }}
+                                {% else %}
+                                    -
+                                {% endif %}
+
+                            </td>
+
+                            <td>
+
+                                {% if transaction[5] == "Issued" %}
+
+                                    <span class="status-issued">
+                                        📖 Issued
+                                    </span>
+
+                                {% else %}
+
+                                    <span class="status-returned">
+                                        🔄 Returned
+                                    </span>
+
+                                {% endif %}
+
+                            </td>
+
+                            <td>
+
+                                {% if transaction[5] == "Returned" %}
+
+                                    ₹{{ "%.2f"|format(transaction[6]) }}
+
+                                {% else %}
+
+                                    -
+
+                                {% endif %}
+
+                            </td>
+
+                        </tr>
+
+                        {% else %}
+
+                        <tr>
+
+                            <td colspan="7">
+                                No transactions found.
+                            </td>
+
+                        </tr>
+
+                        {% endfor %}
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </div>
+
+
+        <footer>
+
+            <p>
+                © 2026 Smart Library Management System
+            </p>
+
+        </footer>
+
+    </main>
+
+</div>
+
+</body>
+</html>

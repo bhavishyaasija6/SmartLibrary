@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Smart Library Dashboard</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body>
+
+<div class="dashboard">
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+
+        <div class="logo">
+            📚
+            <span>Smart Library</span>
+        </div>
+
+        <nav class="sidebar-nav">
+
+            <a href="/" class="active">
+                🏠
+                <span>Dashboard</span>
+            </a>
+
+            <a href="/books">
+                📚
+                <span>Books</span>
+            </a>
+
+            <a href="/members">
+                👥
+                <span>Members</span>
+            </a>
+
+            <a href="/issue-return">
+                📖
+                <span>Issue / Return</span>
+            </a>
+
+            <a href="/reports">📊 <span>Reports</span></a>
+        </nav>
+
+        <div class="sidebar-bottom">
+            <p>Smart Library</p>
+            <small>Management System</small>
+        </div>
+
+    </aside>
+
+
+    <!-- MAIN CONTENT -->
+    <main class="main-content">
+
+        <!-- TOP HEADER -->
+        <div class="top-header">
+
+            <div>
+                <h1>Dashboard</h1>
+                <p>Welcome to your Smart Library Management System</p>
+            </div>
+
+            <div class="header-icon">
+                📚
+            </div>
+
+        </div>
+
+
+        <!-- STAT CARDS -->
+        <div class="stats-grid">
+
+            <div class="stat-card">
+                <div class="stat-icon blue">📚</div>
+
+                <div>
+                    <h3>Total Books</h3>
+                    <h2>{{ total_books }}</h2>
+                </div>
+            </div>
+
+
+            <div class="stat-card">
+                <div class="stat-icon purple">👥</div>
+
+                <div>
+                    <h3>Total Members</h3>
+                    <h2>{{ total_members }}</h2>
+                </div>
+            </div>
+
+
+            <div class="stat-card">
+                <div class="stat-icon orange">📖</div>
+
+                <div>
+                    <h3>Currently Issued</h3>
+                    <h2>{{ issued_books }}</h2>
+                </div>
+            </div>
+
+
+            <div class="stat-card">
+                <div class="stat-icon green">🔄</div>
+
+                <div>
+                    <h3>Returned Books</h3>
+                    <h2>{{ returned_books }}</h2>
+                </div>
+            </div>
+
+        </div>
+
+
+        <!-- QUICK ACTIONS -->
+        <div class="section-title">
+            <h2>Quick Actions</h2>
+            <p>Manage your library easily</p>
+        </div>
+
+
+        <div class="quick-actions">
+
+            <a href="/add-book" class="action-card">
+                <div>➕</div>
+                <h3>Add Book</h3>
+                <p>Add a new book to library</p>
+            </a>
+
+
+            <a href="/books" class="action-card">
+                <div>📚</div>
+                <h3>View Books</h3>
+                <p>Search and manage books</p>
+            </a>
+
+
+            <a href="/members" class="action-card">
+                <div>👥</div>
+                <h3>Members</h3>
+                <p>Manage library members</p>
+            </a>
+
+
+            <a href="/issue-return" class="action-card">
+                <div>📖</div>
+                <h3>Issue / Return</h3>
+                <p>Manage book transactions</p>
+            </a>
+
+        </div>
+
+
+        <!-- RECENT BOOKS -->
+        <div class="content-card">
+
+            <div class="card-header">
+
+                <div>
+                    <h2>📚 Recent Books</h2>
+                    <p>Latest books added to the library</p>
+                </div>
+
+                <a href="/books" class="view-all">
+                    View All
+                </a>
+
+            </div>
+
+
+            {% if recent_books %}
+
+            <div class="recent-books">
+
+                <table>
+
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Book Title</th>
+                            <th>Author</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+
+                        {% for book in recent_books %}
+
+                        <tr>
+                            <td>#{{ book[0] }}</td>
+                            <td>{{ book[1] }}</td>
+                            <td>{{ book[2] }}</td>
+                        </tr>
+
+                        {% endfor %}
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+            {% else %}
+
+            <div class="empty-activity">
+                <div>📚</div>
+                <p>No books have been added yet.</p>
+
+                <a href="/add-book" class="add-book-link">
+                    ➕ Add Your First Book
+                </a>
+            </div>
+
+            {% endif %}
+
+        </div>
+
+
+        <br>
+
+
+        <!-- RECENT ACTIVITY -->
+        <div class="content-card">
+
+            <div class="card-header">
+
+                <div>
+                    <h2>📋 Recent Activity</h2>
+                    <p>Latest issue and return transactions</p>
+                </div>
+
+                <a href="/issue-return" class="view-all">
+                    View All
+                </a>
+
+            </div>
+
+
+            {% if recent_activity %}
+
+            <div class="recent-books">
+
+                <table>
+
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Book</th>
+                            <th>Member</th>
+                            <th>Issue Date</th>
+                            <th>Return Date</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+
+                        {% for activity in recent_activity %}
+
+                        <tr>
+
+                            <td>#{{ activity[0] }}</td>
+
+                            <td>
+                                {{ activity[1] }}
+                            </td>
+
+                            <td>
+                                {{ activity[2] }}
+                            </td>
+
+                            <td>
+                                {{ activity[3] }}
+                            </td>
+
+                            <td>
+                                {% if activity[4] %}
+                                    {{ activity[4] }}
+                                {% else %}
+                                    -
+                                {% endif %}
+                            </td>
+
+                            <td>
+
+                                {% if activity[5] == "Issued" %}
+
+                                    <span class="status-issued">
+                                        📖 Issued
+                                    </span>
+
+                                {% else %}
+
+                                    <span class="status-returned">
+                                        🔄 Returned
+                                    </span>
+
+                                {% endif %}
+
+                            </td>
+
+                        </tr>
+
+                        {% endfor %}
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+            {% else %}
+
+            <div class="empty-activity">
+
+                <div>📊</div>
+
+                <p>
+                    No library activity available yet.
+                </p>
+
+            </div>
+
+            {% endif %}
+
+        </div>
+
+
+        <!-- FOOTER -->
+        <footer>
+            <p>© 2026 Smart Library Management System</p>
+        </footer>
+
+    </main>
+
+</div>
+
+</body>
+</html>

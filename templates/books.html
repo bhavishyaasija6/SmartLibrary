@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Library Books</title>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body>
+
+<div class="container">
+
+    <div class="header">
+        <h1>📚 Library Books</h1>
+        <p>Manage and search library books</p>
+    </div>
+
+    <br>
+
+    <form method="GET" action="/books">
+<input class="search-input" type="text" name="search" placeholder="🔍 Search by book title or author">
+
+      <button type="submit">🔍 Search Books</button>
+
+    </form>
+
+    <br>
+
+    <a href="/add-book">
+        <button>➕ Add New Book</button>
+    </a>
+
+    <table>
+
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Book Title</th>
+                <th>Author</th>
+            </tr>
+        </thead>
+
+        <tbody>
+
+            {% for book in books %}
+
+            <tr>
+                <td>{{ book[0] }}</td>
+                <td>{{ book[1] }}</td>
+                <td>{{ book[2] }}</td>
+            </tr>
+
+            {% else %}
+
+            <tr>
+                <td colspan="3">No books found.</td>
+            </tr>
+
+            {% endfor %}
+
+        </tbody>
+
+    </table>
+
+    <br>
+
+    <a href="/">
+        <button>🏠 Dashboard</button>
+    </a>
+
+</div>
+
+</body>
+</html>

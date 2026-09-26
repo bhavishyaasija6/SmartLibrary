@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Issue / Return Books</title>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body>
+
+<div class="container">
+
+    <div class="header">
+        <h1>📖 Issue / Return Books</h1>
+        <p>Manage book issue, return and fine calculation</p>
+    </div>
+
+    <br>
+
+    <!-- Duplicate Issue Warning -->
+    {% if error == "already_issued" %}
+    <div class="alert">
+        ⚠️ This book is already issued and cannot be issued again.
+    </div>
+    {% endif %}
+
+    <div class="card">
+        <h2>📖 Issue a Book</h2>
+
+        <form method="POST" action="/issue-book">
+
+            <label>Book ID:</label>
+            <br>
+            <input type="number"
+                   name="book_id"
+                   placeholder="Enter Book ID"
+                   class="search-input"
+                   required>
+
+            <br><br>
+
+            <label>Member ID:</label>
+            <br>
+            <input type="number"
+                   name="member_id"
+                   placeholder="Enter Member ID"
+                   class="search-input"
+                   required>
+
+            <br><br>
+
+            <button type="submit">📖 Issue Book</button>
+
+        </form>
+    </div>
+
+    <br>
+
+    <div class="card">
+        <h2>🔄 Return a Book</h2>
+
+        <form method="POST" action="/return-book">
+
+            <label>Transaction ID:</label>
+            <br>
+            <input type="number"
+                   name="transaction_id"
+                   placeholder="Enter Transaction ID"
+                   class="search-input"
+                   required>
+
+            <br><br>
+
+            <button type="submit">🔄 Return Book</button>
+
+        </form>
+    </div>
+
+    <br>
+
+    <div class="card">
+        <h2>📋 Transaction History</h2>
+
+        <table>
+
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Book</th>
+                    <th>Member</th>
+                    <th>Issue Date</th>
+                    <th>Status</th>
+                    <th>Fine</th>
+                </tr>
+            </thead>
+
+            <tbody>
+
+                {% for transaction in transactions %}
+
+                <tr>
+                    <td>{{ transaction[0] }}</td>
+                    <td>{{ transaction[1] }}</td>
+                    <td>{{ transaction[2] }}</td>
+                    <td>{{ transaction[3] }}</td>
+                    <td>{{ transaction[4] }}</td>
+
+                    <td>
+                        {% if transaction[4] == "Returned" %}
+                            ₹{{ transaction[5] }}
+                        {% else %}
+                            Not Returned
+                        {% endif %}
+                    </td>
+                </tr>
+
+                {% else %}
+
+                <tr>
+                    <td colspan="6">No transactions found.</td>
+                </tr>
+
+                {% endfor %}
+
+            </tbody>
+
+        </table>
+    </div>
+
+    <br>
+
+    <a href="/">
+        <button>🏠 Dashboard</button>
+    </a>
+
+</div>
+
+</body>
+</html>
