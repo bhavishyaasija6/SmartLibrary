@@ -172,6 +172,24 @@ def issue_book():
     conn = sqlite3.connect("library.db")
     cursor = conn.cursor()
 
+    # Check whether book exists
+    cursor.execute(
+        "SELECT id FROM books WHERE id = ?",
+        (book_id,)
+    )
+    book = cursor.fetchone()
+
+    # Check whether member exists
+    cursor.execute(
+        "SELECT id FROM members WHERE id = ?",
+        (member_id,)
+    )
+    member = cursor.fetchone()
+
+    if not book or not member:
+        conn.close()
+        return redirect("/issue-return")
+
     # Check if the book is already issued
     cursor.execute(
         """
@@ -180,14 +198,12 @@ def issue_book():
         """,
         (book_id,)
     )
-
     already_issued = cursor.fetchone()
 
     if already_issued:
         conn.close()
-        return redirect("/issue-return?error=already_issued")
+        return redirect("/issue-return")
 
-    # Issue the book
     cursor.execute(
         """
         INSERT INTO transactions
@@ -201,8 +217,6 @@ def issue_book():
     conn.close()
 
     return redirect("/issue-return")
-
-
 @app.route("/return-book", methods=["POST"])
 def return_book():
     transaction_id = request.form["transaction_id"]
